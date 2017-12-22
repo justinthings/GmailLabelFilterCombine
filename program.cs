@@ -13,15 +13,16 @@ namespace XmlUtilities
 	{
 		static void Main(string[] args)
 		{
-			string labelsCommaSeparated = "Advertisements,Family,Friends,Financial,Tech Information,Work,Grace Ross,Mike,Google Voice,Education,Social,Me,News,Financial/Rent,Organizations,Appartments,Political,School,Food,Calendar,Legal,Privacy,Music,Car,New Jobs,Jobs,Travel,Craigslist,Appartments/Moving,Creative,Development,Health,Iris";
+			//the xml file of the gmail filters, you can export them in Gmail settings:
 			string filepath = @"C:\Users\Justin Ross\Desktop\mailFilters.xml";
+			
+			string labelsCommaSeparated = "Advertisements,Family,Friends,Financial,Tech Information,Work,Grace Ross,Mike,Google Voice,Education,Social,Me,News,Financial/Rent,Organizations,Appartments,Political,School,Food,Calendar,Legal,Privacy,Music,Car,New Jobs,Jobs,Travel,Craigslist,Appartments/Moving,Creative,Development,Health,Iris";
 			var labels = labelsCommaSeparated.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s.Trim().ToLower());
 
 			XmlDocument doc = new XmlDocument();
 			doc.PreserveWhitespace = false;
 			doc.Load(filepath);
-			var newFileNameNoExt = GetFullPathWithoutExtension(filepath)
-								   + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss");
+			var newFileNameNoExt = GetFullPathWithoutExtension(filepath) + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss");
 			var newFileName = newFileNameNoExt + Path.GetExtension(filepath);
 			var newFileNameLog = newFileNameNoExt + "_LOG.txt";
 			Logger l = new Logger(newFileNameLog);
@@ -31,9 +32,7 @@ namespace XmlUtilities
 			{
 				RemoveDuplicateLabelFilters_FiltersBasedOnEmailAddressFrom(doc, label, l);
 			}
-
-
-
+			
 			l.Log("writing file");
 
 			doc.Save(newFileName);
