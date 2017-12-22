@@ -11,6 +11,38 @@ namespace XmlUtilities
 {
 	class Program
 	{
+		static void Main(string[] args)
+		{
+			string labelsCommaSeparated = "Advertisements,Family,Friends,Financial,Tech Information,Work,Grace Ross,Mike,Google Voice,Education,Social,Me,News,Financial/Rent,Organizations,Appartments,Political,School,Food,Calendar,Legal,Privacy,Music,Car,New Jobs,Jobs,Travel,Craigslist,Appartments/Moving,Creative,Development,Health,Iris";
+			string filepath = @"C:\Users\Justin Ross\Desktop\mailFilters.xml";
+			var labels = labelsCommaSeparated.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s.Trim().ToLower());
+
+			XmlDocument doc = new XmlDocument();
+			doc.PreserveWhitespace = false;
+			doc.Load(filepath);
+			var newFileNameNoExt = GetFullPathWithoutExtension(filepath)
+								   + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss");
+			var newFileName = newFileNameNoExt + Path.GetExtension(filepath);
+			var newFileNameLog = newFileNameNoExt + "_LOG.txt";
+			Logger l = new Logger(newFileNameLog);
+			l.LogH1("Combine Label Filter Duplicates");
+			l.Log("...with FROM email addresses specified");
+			foreach (var label in labels)
+			{
+				RemoveDuplicateLabelFilters_FiltersBasedOnEmailAddressFrom(doc, label, l);
+			}
+
+
+
+			l.Log("writing file");
+
+			doc.Save(newFileName);
+
+
+			var xPath = "//apps:feed[1]";
+
+
+		}
 		public class Logger
 		{
 			public string FilePath { get; }
@@ -94,38 +126,7 @@ namespace XmlUtilities
 
 
 		}
-		static void Main(string[] args)
-		{
-			string labelsCommaSeparated = "Advertisements,Family,Friends,Financial,Tech Information,Work,Grace Ross,Mike,Google Voice,Education,Social,Me,News,Financial/Rent,Organizations,Appartments,Political,School,Food,Calendar,Legal,Privacy,Music,Car,New Jobs,Jobs,Travel,Craigslist,Appartments/Moving,Creative,Development,Health,Iris";
-			string filepath = @"C:\Users\Justin Ross\Desktop\mailFilters.xml";
-			var labels = labelsCommaSeparated.Split(',').Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s.Trim().ToLower());
-
-			XmlDocument doc = new XmlDocument();
-			doc.PreserveWhitespace = false;
-			doc.Load(filepath);
-			var newFileNameNoExt = GetFullPathWithoutExtension(filepath)
-								   + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss");
-			var newFileName = newFileNameNoExt + Path.GetExtension(filepath);
-			var newFileNameLog = newFileNameNoExt + "_LOG.txt";
-			Logger l = new Logger(newFileNameLog);
-			l.LogH1("Remove Label Filter Duplicates");
-			l.Log("...with FROM email addres specified");
-			foreach (var label in labels)
-			{
-				RemoveDuplicateLabelFilters_FiltersBasedOnEmailAddressFrom(doc, label, l);
-			}
-
-
-
-			l.Log("writing file");
-
-			doc.Save(newFileName);
-
-
-			var xPath = "//apps:feed[1]";
-
-
-		}
+		
 
 		private static int googleMaxLengthOfFilter = 1520;
 		public static void RemoveDuplicateLabelFilters_FiltersBasedOnEmailAddressFrom(XmlDocument doc, string label, Logger l)
