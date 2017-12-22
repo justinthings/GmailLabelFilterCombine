@@ -17,7 +17,7 @@ namespace XmlUtilities
 	{
 		static void Main(string[] args)
 		{
-			//the xml file of the gmail filters, you can export them in Gmail settings:
+			//the xml file of the gmail filters, you can export them in Gmail settings.
 			string filepath = @"C:\Users\Justin Ross\Desktop\mailFilters.xml";
 			
 			string labelsCommaSeparated = "Advertisements,Family,Friends,Financial,Tech Information,Work,Grace Ross,Mike,Google Voice,Education,Social,Me,News,Financial/Rent,Organizations,Appartments,Political,School,Food,Calendar,Legal,Privacy,Music,Car,New Jobs,Jobs,Travel,Craigslist,Appartments/Moving,Creative,Development,Health,Iris";
@@ -40,7 +40,7 @@ namespace XmlUtilities
 			l.Log("writing file");
 
 			doc.Save(newFileName);
-
+			// now import this file into gmail in the same place you exported the original
 
 			var xPath = "//apps:feed[1]";
 
