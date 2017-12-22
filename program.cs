@@ -9,6 +9,10 @@ using System.Xml.XPath;
 
 namespace XmlUtilities
 {
+	//a quick and dirt solution to combining gmail filters. 
+	//This will only affect filters where a label should be applied to incomming mail with the senders specified
+	//aka this combines filters where the filter is setup to apply a Label to incoming mail 
+	//based off off who sent the email (from)
 	class Program
 	{
 		static void Main(string[] args)
